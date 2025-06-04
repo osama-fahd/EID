@@ -116,10 +116,11 @@ def create_image_with_name(name, template_path="./Moneymoon-Eid.jpg"):
     # Center text on the image
     img_width, img_height = img.size
     x = (img_width - text_width) / 2
-    y = (img_height - text_height) / 2
+    y = (img_height - text_height) / 2 + 30  # Move text down by 30 pixels
 
     # Draw text on the image
     draw.text((x, y), bidi_text, font=font, fill="#43FFAE")
+
 
     return img
 

@@ -102,7 +102,7 @@ def create_image_with_name(name, template_path="./Moneymoon-Eid.jpg"):
     bidi_text = get_display(reshaped_text)
 
     # Load custom Arabic font
-    font_path = os.path.join("fonts", "Amiri-Regular.ttf")  # Ensure this file exists!
+    font_path = os.path.join("fonts", "DINNextLTArabic-Black.ttf")  # Ensure this file exists!
     try:
         font = ImageFont.truetype(font_path, size=80)
     except IOError:

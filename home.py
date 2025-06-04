@@ -53,7 +53,7 @@ translations = {
     "English": {
         "title": "Moneymoon Eid Images! 🎉",
         "sidebar_text": "Developed by Moneymoon's team",
-        "greeting": "Moneymoon family wishes you a happy Eid Al-Fitr! Please type your name and click the button to get your Eid Al-Adha 2025 greeting card!",
+        "greeting": "Moneymoon family wishes you a happy Eid Al-Adha! Please type your name and click the button to get your Eid Al-Adha 2025 greeting card!",
         "name_label": "Name:",
         "generate_button": "Generate Eid Image",
         "caption": "Your Eid Image",
@@ -62,7 +62,7 @@ translations = {
     "Arabic": {
         "title": "عيد موني مون!🎉 ",
         "sidebar_text": "تم التطوير بواسطة فريق موني مون",
-        "greeting": "عائلة موني مون تتمنى لكم عيد فطر سعيد! يرجى كتابة اسمك والضغط على الزر للحصول على بطاقة تهنئة عيد الاضحى",
+        "greeting": "عائلة موني مون تتمنى لكم عيد أضحى سعيد! يرجى كتابة اسمك والضغط على الزر للحصول على بطاقة تهنئة عيد الاضحى",
         "name_label": "الاسم:",
         "generate_button": "إنشاء بطاقة التهنئة",
         "caption": "صورتك للعيد",
@@ -91,7 +91,7 @@ with st.sidebar:
 st.title(texts["title"])
 
 
-def create_image_with_name(name, template_path="./Moneymoon-Ramadan.jpg"):
+def create_image_with_name(name, template_path="./Moneymoon-Eid.jpg"):
     # Open the template image
     img = Image.open(template_path)
     draw = ImageDraw.Draw(img)

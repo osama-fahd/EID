@@ -108,7 +108,7 @@ def create_image_with_name(name, template_path="./Moneymoon-Eid.jpg"):
     except IOError:
         font = ImageFont.load_default()  # Fallback, but won't support Arabic
 
-    # Get text size
+   # Get text size
     bbox = draw.textbbox((0, 0), bidi_text, font=font)
     text_width = bbox[2] - bbox[0]
     text_height = bbox[3] - bbox[1]
@@ -119,11 +119,12 @@ def create_image_with_name(name, template_path="./Moneymoon-Eid.jpg"):
     # Center horizontally
     x = (img_width - text_width) / 2
 
-    # Align near the bottom with a margin (e.g. 50 pixels from the bottom)
-    y = img_height - text_height - 50
+    # Move text up from the bottom (e.g. 150 pixels)
+    y = img_height - text_height - 150
 
     # Draw text
     draw.text((x, y), bidi_text, font=font, fill="#43FFAE")
+
 
 
 

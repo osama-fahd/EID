@@ -120,7 +120,7 @@ def create_image_with_name(name, template_path="./Moneymoon-Eid.jpg"):
     x = (img_width - text_width) / 2
 
     # Move text up from the bottom (e.g. 150 pixels)
-    y = img_height - text_height - 150
+    y = img_height - text_height - 300
 
     # Draw text
     draw.text((x, y), bidi_text, font=font, fill="#43FFAE")

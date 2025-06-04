@@ -1,0 +1,4 @@
+arabic_reshaper==3.0.0
+Pillow==10.3.0
+streamlit==1.42.2
+python-bidi== 0.6.6

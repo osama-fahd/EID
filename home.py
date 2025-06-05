@@ -92,7 +92,7 @@ with st.sidebar:
 st.title(texts["title"])
 
 
-def create_image_with_name(name, template_path="./Moneymoon-Eid.jpg"):
+def create_image_with_name(name, template_path="./001-Moneymoon-Eid-Greeting.jpg"):
     # Open the template image
     img = Image.open(template_path)
     draw = ImageDraw.Draw(img)
@@ -113,17 +113,30 @@ def create_image_with_name(name, template_path="./Moneymoon-Eid.jpg"):
     text_width = bbox[2] - bbox[0]
     text_height = bbox[3] - bbox[1]
 
-    # Get image size
+    # Get text size
+    bbox = draw.textbbox((0, 0), bidi_text, font=font)
+    text_width = bbox[2] - bbox[0]
+    text_height = bbox[3] - bbox[1]
+
+    # Center text on the image
     img_width, img_height = img.size
-
-    # Center horizontally
     x = (img_width - text_width) / 2
+    y = (img_height - text_height) / 2
 
-    # Move text up from the bottom (e.g. 150 pixels)
-    y = img_height - text_height - 325
-
-    # Draw text
+    # Draw text on the image
     draw.text((x, y), bidi_text, font=font, fill="#4DD6E9")
+
+    # # Get image size
+    # img_width, img_height = img.size
+
+    # # Center horizontally
+    # x = (img_width - text_width) / 2
+
+    # # Move text up from the bottom (e.g. 150 pixels)
+    # y = img_height - text_height - 325
+
+    # # Draw text
+    # draw.text((x, y), bidi_text, font=font, fill="#4DD6E9")
 
 
 

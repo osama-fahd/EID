@@ -102,13 +102,13 @@ def create_image_with_name(name, template_path="./001-Moneymoon-Eid-Greeting.jpg
     bidi_text = get_display(reshaped_text)
 
     # Load custom Arabic font
-    font_path = os.path.join("fonts", "DINNextLTArabic-Bold.ttf")  # Ensure this file exists!
+    font_path = os.path.join("fonts", "DINNextLTArabic-Regular_0.ttf")  # Ensure this file exists!
     try:
         font = ImageFont.truetype(font_path, size=80)
     except IOError:
         font = ImageFont.load_default()  # Fallback, but won't support Arabic
 
-        # Get text size
+    # Get text size
     bbox = draw.textbbox((0, 0), bidi_text, font=font)
     text_width = bbox[2] - bbox[0]
     text_height = bbox[3] - bbox[1]

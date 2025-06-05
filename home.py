@@ -119,11 +119,11 @@ def create_image_with_name(name, template_path="./001-Moneymoon-Eid-Greeting.jpg
     y = (img_height - text_height) / 2 + 40  # Move 20 pixels down
 
     # Draw text on the image
-    draw.text((x, y), bidi_text, font=font, fill="#4DD6E9")
+    draw.text((x, y), bidi_text, font=font, fill="#FFFFFF")
 
 
     # Draw text on the image
-    draw.text((x, y), bidi_text, font=font, fill="#4DD6E9")
+    # draw.text((x, y), bidi_text, font=font, fill="#4DD6E9")
 #    # Get text size
 #     bbox = draw.textbbox((0, 0), bidi_text, font=font)
 #     text_width = bbox[2] - bbox[0]

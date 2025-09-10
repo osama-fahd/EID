@@ -62,7 +62,7 @@ translations = {
         "generation_success": "✅ All cards generated! You can download them all at once using the final button below."
     },
     "Arabic": {
-        "title": " بطاقات دعوة موني مون",
+        "title": "مولد بطاقات دعوة موني مون",
         "sidebar_text": "تم التطوير بواسطة فريق موني مون",
         "greeting": """يرجى كتابة أسماء المدعوين (اسم واحد في كل سطر) والضغط على الزر للحصول على بطاقات الدعوة""",
         "name_label": "الأسماء:",

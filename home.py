@@ -4,7 +4,7 @@ import io
 import arabic_reshaper
 from bidi.algorithm import get_display
 import os
-import zipfile # IMPORTED: Required for creating ZIP files
+import zipfile
 
 st.set_page_config(
     page_title="Moneymoon Invitation Cards",
@@ -22,7 +22,7 @@ def inject_custom_css():
             text-align: right;
         }
         .stButton > button {
-            float: left;  /* Ensures button stays on the left side for Arabic */
+            float: left;
         }
         .stTextArea > div > div > textarea, .stTextInput > div > div > input {
             text-align: right;
@@ -55,9 +55,11 @@ translations = {
         "name_label": "Names:",
         "generate_button": "Generate Invitation Cards",
         "caption": "Invitation card for",
-        # MODIFIED: Changed "Download Image" to a new key for the ZIP button
+        "download_one": "Download this Card",
         "download_all": "Download All Cards (.zip)",
-        "warning": "Please enter at least one name."
+        "warning": "Please enter at least one name.",
+        "download_all_note": "Note: After generating, a button to download all cards at once will appear at the very bottom of the page.",
+        "generation_success": "✅ All cards generated! You can download them all at once using the final button below."
     },
     "Arabic": {
         "title": " بطاقات دعوة موني مون",
@@ -66,9 +68,11 @@ translations = {
         "name_label": "الأسماء:",
         "generate_button": "إنشاء بطاقات الدعوة",
         "caption": "بطاقة دعوة لـ",
-        # MODIFIED: Changed "Download Image" to a new key for the ZIP button (Arabic)
+        "download_one": "تحميل هذه البطاقة",
         "download_all": "تحميل جميع البطاقات (ملف مضغوط)",
-        "warning": "يرجى إدخال اسم واحد على الأقل."
+        "warning": "يرجى إدخال اسم واحد على الأقل.",
+        "download_all_note": "ملاحظة: بعد الإنشاء، سيظهر زر في أسفل الصفحة لتحميل جميع البطاقات مرة واحدة.",
+        "generation_success": "✅ تم إنشاء جميع البطاقات! يمكنك تحميلها جميعًا مرة واحدة باستخدام الزر النهائي أدناه."
     }
 }
 
@@ -120,47 +124,53 @@ def create_image_with_name(name, template_path="./Personal Invitation.jpg"):
 st.write(texts["greeting"])
 names_input = st.text_area(texts["name_label"], height=200)
 
-# MODIFIED: Reworked the entire logic to generate a single ZIP file
+st.info(texts['download_all_note'])
+
 if st.button(texts["generate_button"]):
     names_list = [name.strip() for name in names_input.splitlines() if name.strip()]
 
     if not names_list:
         st.warning(texts['warning'])
     else:
-        # Create a list to hold the generated image data in memory
-        generated_images = []
-        
-        # --- Step 1: Generate all images and display them ---
-        st.markdown("---")
-        for name in names_list:
-            img = create_image_with_name(name)
-            
-            # Display the generated card to the user
-            st.image(img, caption=f"{texts['caption']} {name}")
-            
-            # Convert image to bytes
-            img_bytes = io.BytesIO()
-            img.save(img_bytes, format="PNG")
-            
-            # Prepare filename and store it with the image bytes
-            file_name = f"Invitation_Card_{name}.png"
-            generated_images.append((file_name, img_bytes.getvalue()))
-        
-        # --- Step 2: Create a ZIP file in memory ---
-        zip_buffer = io.BytesIO()
-        # The 'with' statement ensures the zip file is properly closed
-        with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zf:
-            # Write each generated image into the zip file
-            for file_name, data in generated_images:
-                zf.writestr(file_name, data)
-        
-        zip_buffer.seek(0) # Rewind the buffer to the beginning
+        generated_images_for_zip = []
 
-        # --- Step 3: Provide a single download button for the ZIP file ---
-        st.markdown("---")
-        st.download_button(
-            label=f"📂 {texts['download_all']}",
-            data=zip_buffer,
-            file_name="All_Invitation_Cards.zip",
-            mime="application/zip",
-        )
+        for name in names_list:
+            with st.container():
+                st.markdown("---")
+                img = create_image_with_name(name)
+
+                st.image(img, caption=f"{texts['caption']} {name}")
+
+                img_bytes = io.BytesIO()
+                img.save(img_bytes, format="PNG")
+                img_bytes_value = img_bytes.getvalue()
+
+                st.download_button(
+                    label=f"📥 {texts['download_one']}",
+                    data=img_bytes_value,
+                    file_name=f"Invitation_Card_{name}.png",
+                    mime="image/png",
+                    key=f"download_single_{name}"
+                )
+
+                file_name_for_zip = f"Invitation_Card_{name}.png"
+                generated_images_for_zip.append((file_name_for_zip, img_bytes_value))
+
+        if generated_images_for_zip:
+            zip_buffer = io.BytesIO()
+            with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zf:
+                for file_name, data in generated_images_for_zip:
+                    zf.writestr(file_name, data)
+
+            zip_buffer.seek(0)
+
+            st.markdown("---")
+            st.success(texts['generation_success'])
+
+            st.download_button(
+                label=f"📂 {texts['download_all']}",
+                data=zip_buffer,
+                file_name="All_Invitation_Cards.zip",
+                mime="application/zip",
+                key="download_all_zip"
+            )

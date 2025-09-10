@@ -60,7 +60,7 @@ translations = {
         "warning": "Please enter at least one name."
     },
     "Arabic": {
-        "title": "مولد بطاقات دعوة موني مون",
+        "title": " بطاقات دعوة موني مون",
         "sidebar_text": "تم التطوير بواسطة فريق موني مون",
         # MODIFIED: Updated greeting text for multiple names (Arabic)
         "greeting": """يرجى كتابة أسماء المدعوين (اسم واحد في كل سطر) والضغط على الزر للحصول على بطاقات الدعوة""",

@@ -6,10 +6,10 @@ from bidi.algorithm import get_display
 import os
 
 st.set_page_config(
-    page_title="Moneymoon Eid Images",
+    page_title="Moneymoon Invitation Cards",
     layout="wide",
     initial_sidebar_state="expanded",
-    page_icon="🌙",
+    page_icon="✉️",
 )
 
 
@@ -48,22 +48,21 @@ inject_custom_css()
 
 translations = {
     "English": {
-        "title": "Moneymoon Eid Images! 🎉",
+        "title": "Moneymoon Invitation Card",
         "sidebar_text": "Developed by Moneymoon's team",
-        "greeting": "Moneymoon family wishes you a happy Eid Al-Adha! Please type your name and click the button to get your Eid Al-Adha 2025 greeting card!",
+        "greeting": "Please type the invitee's name and click the button to get the invitation card.",
         "name_label": "Name:",
-        "generate_button": "Generate Eid Image",
-        "caption": "Your Eid Image",
+        "generate_button": "Generate Invitation Card",
+        "caption": "Your Invitation Card",
         "download": "Download the Image!",
     },
     "Arabic": {
-        "title": "عيد موني مون!🎉 ",
+        "title": "بطاقة دعوة موني مون",
         "sidebar_text": "تم التطوير بواسطة فريق موني مون",
-        "greeting": """عائلة موني مون تتمنى لكم عيد أضحى سعيد!
-يرجى كتابة اسمك والضغط على الزر للحصول على بطاقة تهنئة عيد الأضحى""",
+        "greeting": """يرجى كتابة اسم المدعو والضغط على الزر للحصول على بطاقة الدعوة""",
         "name_label": "الاسم:",
-        "generate_button": "إنشاء بطاقة التهنئة",
-        "caption": "صورتك للعيد",
+        "generate_button": "إنشاء بطاقة الدعوة",
+        "caption": "صورتك للدعوة",
         "download": "تحميل الصورة!",
     }
 }
@@ -87,7 +86,7 @@ with st.sidebar:
 st.title(texts["title"])
 
 
-def create_image_with_name(name, template_path="./001-Moneymoon-Eid-Greeting.jpg"):
+def create_image_with_name(name, template_path="./Personal Invitation.jpg"):
     img = Image.open(template_path)
     draw = ImageDraw.Draw(img)
 
@@ -108,9 +107,8 @@ def create_image_with_name(name, template_path="./001-Moneymoon-Eid-Greeting.jpg
     x = (img_width - text_width) / 2
     y = (img_height - text_height) / 2 + 40  
 
-    draw.text((x, y), bidi_text, font=font, fill="#4DD6E9")
+    draw.text((x, y), bidi_text, font=font, fill="#e0e0e0")
     # "#43FFAE"
-    # "#4DD6E9"
 
 
     return img

@@ -107,7 +107,7 @@ def create_image_with_name(name, template_path="./Personal Invitation.jpg"):
     x = (img_width - text_width) / 2
     y = (img_height - text_height) / 2 - 80  
 
-    draw.text((x, y), bidi_text, font=font, fill="#e0e0e0")
+    draw.text((x, y), bidi_text, font=font, fill="#43FFAE")
     # "#43FFAE"
 
 

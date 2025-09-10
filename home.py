@@ -23,7 +23,7 @@ def inject_custom_css():
         .stButton > button {
             float: left;  /* Ensures button stays on the left side for Arabic */
         }
-        .stTextInput > div > div > input {
+        .stTextArea > div > div > textarea, .stTextInput > div > div > input {
             text-align: right;
         }
         .stTitle, .stHeader, .stMarkdown {
@@ -48,22 +48,28 @@ inject_custom_css()
 
 translations = {
     "English": {
-        "title": "Moneymoon Invitation Card",
+        "title": "Moneymoon Invitation Card Generator",
         "sidebar_text": "Developed by Moneymoon's team",
-        "greeting": "Please type the invitee's name and click the button to get the invitation card.",
-        "name_label": "Name:",
-        "generate_button": "Generate Invitation Card",
-        "caption": "Your Invitation Card",
-        "download": "Download the Image!",
+        # MODIFIED: Updated greeting text for multiple names
+        "greeting": "Please type the invitees' names (one name per line) and click the button to get the invitation cards.",
+        # MODIFIED: Updated label for clarity
+        "name_label": "Names:",
+        "generate_button": "Generate Invitation Cards",
+        "caption": "Invitation card for",
+        "download": "Download Image",
+        "warning": "Please enter at least one name."
     },
     "Arabic": {
-        "title": "بطاقة دعوة موني مون",
+        "title": "مولد بطاقات دعوة موني مون",
         "sidebar_text": "تم التطوير بواسطة فريق موني مون",
-        "greeting": """يرجى كتابة اسم المدعو والضغط على الزر للحصول على بطاقة الدعوة""",
-        "name_label": "الاسم:",
-        "generate_button": "إنشاء بطاقة الدعوة",
-        "caption": "صورتك للدعوة",
-        "download": "تحميل الصورة!",
+        # MODIFIED: Updated greeting text for multiple names (Arabic)
+        "greeting": """يرجى كتابة أسماء المدعوين (اسم واحد في كل سطر) والضغط على الزر للحصول على بطاقات الدعوة""",
+        # MODIFIED: Updated label for clarity (Arabic)
+        "name_label": "الأسماء:",
+        "generate_button": "إنشاء بطاقات الدعوة",
+        "caption": "بطاقة دعوة لـ",
+        "download": "تحميل الصورة",
+        "warning": "يرجى إدخال اسم واحد على الأقل."
     }
 }
 
@@ -108,27 +114,48 @@ def create_image_with_name(name, template_path="./Personal Invitation.jpg"):
     y = (img_height - text_height) / 2 - 50  
 
     draw.text((x, y), bidi_text, font=font, fill="#43FFAE")
-    # "#43FFAE"
-
 
     return img
 
 
 st.write(texts["greeting"])
-name = st.text_input(texts["name_label"])
 
-img = None
+# MODIFICATION 1: Changed st.text_input to st.text_area for multi-line input
+names_input = st.text_area(texts["name_label"], height=200)
+
+# MODIFICATION 2: Reworked the button logic to handle multiple names
 if st.button(texts["generate_button"]):
-    img = create_image_with_name(name)
-    st.image(img, caption=texts["caption"])
+    # Split the input string by new lines to get a list of names
+    # Also, strip whitespace and ignore any empty lines
+    names_list = [name.strip() for name in names_input.splitlines() if name.strip()]
 
-    img_bytes = io.BytesIO()
-    img.save(img_bytes, format="PNG")
-    img_bytes = img_bytes.getvalue()
+    if not names_list:
+        st.warning(texts['warning'])
+    else:
+        # Loop through each name provided
+        for name in names_list:
+            # Use a container to group the image and its download button
+            with st.container():
+                st.markdown("---") # Add a visual separator
+                
+                # Generate the image for the current name
+                img = create_image_with_name(name)
+                
+                # Display the image with a personalized caption
+                st.image(img, caption=f"{texts['caption']} {name}")
 
-    st.download_button(
-        label=texts["download"],
-        data=img_bytes,
-        file_name="Invitation_Card.png",
-        mime="image/png",
-    )
+                # Convert image to bytes for the download button
+                img_bytes = io.BytesIO()
+                img.save(img_bytes, format="PNG")
+                img_bytes = img_bytes.getvalue()
+
+                # Create a download button for each specific image
+                st.download_button(
+                    label=f"{texts['download']} ({name})",
+                    data=img_bytes,
+                    # Create a unique filename for each card
+                    file_name=f"Invitation_Card_{name}.png",
+                    mime="image/png",
+                    # IMPORTANT: Provide a unique key for each button inside a loop
+                    key=f"download_{name}" 
+                )

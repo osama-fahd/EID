@@ -7,7 +7,7 @@ import os
 import zipfile
 
 st.set_page_config(
-    page_title="Moneymoon Invitation Cards",
+    page_title="moneymoon Invitation Cards",
     layout="wide",
     initial_sidebar_state="expanded",
     page_icon="✉️",
@@ -49,8 +49,8 @@ inject_custom_css()
 
 translations = {
     "English": {
-        "title": "Moneymoon Invitation Card Generator",
-        "sidebar_text": "Developed by Moneymoon's team",
+        "title": "moneymoon Invitation Card Generator",
+        "sidebar_text": "Developed by moneymoon's team",
         "greeting": "Please type the invitees' names (one name per line) and click the button to get the invitation cards.",
         "name_label": "Names:",
         "generate_button": "Generate Invitation Cards",

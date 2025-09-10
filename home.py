@@ -129,6 +129,6 @@ if st.button(texts["generate_button"]):
     st.download_button(
         label=texts["download"],
         data=img_bytes,
-        file_name="eid_image.png",
+        file_name="Invitation_Card.png",
         mime="image/png",
     )

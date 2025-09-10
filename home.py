@@ -95,7 +95,7 @@ def create_image_with_name(name, template_path="./Personal Invitation.jpg"):
 
     font_path = os.path.join("fonts", "DINNextLTArabic-Regular_0.ttf")  
     try:
-        font = ImageFont.truetype(font_path, size=80)
+        font = ImageFont.truetype(font_path, size=70)
     except IOError:
         font = ImageFont.load_default() 
 

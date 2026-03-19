@@ -134,7 +134,7 @@ if st.button(texts["generate_button"]):
             st.markdown("---")
             # Make sure your template image is named 'Eid_Template.jpg' or update the path below
             try:
-                img = create_image_with_name(name, template_path="./Eid_Template.jpg")
+                img = create_image_with_name(name, template_path="./Eid-Greeting2.jpg")
                 
                 st.image(img, caption=f"{texts['caption']} - {name}")
 

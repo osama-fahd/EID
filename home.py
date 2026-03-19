@@ -106,7 +106,7 @@ def create_image_with_name(name, template_path="./Eid_Template.jpg"):
 
     font_path = os.path.join("fonts", "DINNextLTArabic-Regular_0.ttf")
     try:
-        font = ImageFont.truetype(font_path, size=70)
+        font = ImageFont.truetype(font_path, size=80)
     except IOError:
         st.error(f"Font file not found at {font_path}! Using default font.")
         font = ImageFont.load_default()

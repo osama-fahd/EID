@@ -4,16 +4,15 @@ import io
 import arabic_reshaper
 from bidi.algorithm import get_display
 import os
-import zipfile
 
 st.set_page_config(
-    page_title="moneymoon Invitation Cards",
+    page_title="Moneymoon Eid Images",
     layout="wide",
     initial_sidebar_state="expanded",
-    page_icon="✉️",
+    page_icon="🌙",
 )
 
-
+# Inject Custom CSS for RTL Support
 def inject_custom_css():
     rtl_css = """
     <style>
@@ -22,9 +21,9 @@ def inject_custom_css():
             text-align: right;
         }
         .stButton > button {
-            float: left;
+            float: left;  /* Ensures button stays on the left side for Arabic */
         }
-        .stTextArea > div > div > textarea, .stTextInput > div > div > input {
+        .stTextInput > div > div > input {
             text-align: right;
         }
         .stTitle, .stHeader, .stMarkdown {
@@ -35,50 +34,47 @@ def inject_custom_css():
     if st.session_state.language == "Arabic":
         st.markdown(rtl_css, unsafe_allow_html=True)
 
-
+# Initialize session state for language
 if "language" not in st.session_state:
     st.session_state.language = "English"
 
+# Language toggle function
 def toggle_language():
     if st.session_state.language == "English":
         st.session_state.language = "Arabic"
     else:
         st.session_state.language = "English"
 
+# Inject RTL CSS
 inject_custom_css()
 
+# Define translations
 translations = {
     "English": {
-        "title": "moneymoon Invitation Card Generator",
-        "sidebar_text": "Developed by moneymoon's team",
-        "greeting": "Please type the invitees' names (one name per line) and click the button to get the invitation cards.",
-        "name_label": "Names:",
-        "generate_button": "Generate Invitation Cards",
-        "caption": "Invitation card for",
-        "download_one": "Download this Card",
-        "download_all": "Download All Cards (.zip)",
-        "warning": "Please enter at least one name.",
-        "download_all_note": "Note: After generating, a button to download all cards at once will appear at the very bottom of the page.",
-        "generation_success": "✅ All cards generated! You can download them all at once using the final button below."
+        "title": "Moneymoon Eid Images! 🎉",
+        "sidebar_text": "Developed by Moneymoon's team",
+        "greeting": "Moneymoon family wishes you a happy Eid Al-Fitr! Please type your name and click the button to get your Eid Al-Fitr 2025 greeting card!",
+        "name_label": "Name:",
+        "generate_button": "Generate Eid Image",
+        "caption": "Your Eid Image",
+        "download": "Download the Image!",
     },
     "Arabic": {
-        "title": " بطاقات دعوة موني مون",
+        "title": "عيد موني مون!🎉 ",
         "sidebar_text": "تم التطوير بواسطة فريق موني مون",
-        "greeting": """يرجى كتابة أسماء المدعوين (اسم واحد في كل سطر) والضغط على الزر للحصول على بطاقات الدعوة""",
-        "name_label": "الأسماء:",
-        "generate_button": "إنشاء بطاقات الدعوة",
-        "caption": "بطاقة دعوة لـ",
-        "download_one": "تحميل هذه البطاقة",
-        "download_all": "تحميل جميع البطاقات (ملف مضغوط)",
-        "warning": "يرجى إدخال اسم واحد على الأقل.",
-        "download_all_note": "ملاحظة: بعد الإنشاء، سيظهر زر في أسفل الصفحة لتحميل جميع البطاقات مرة واحدة.",
-        "generation_success": "✅ تم إنشاء جميع البطاقات! يمكنك تحميلها جميعًا مرة واحدة باستخدام الزر النهائي أدناه."
+        "greeting": "عائلة موني مون تتمنى لكم عيد فطر سعيد! يرجى كتابة اسمك والضغط على الزر للحصول على بطاقة تهنئة عيد الفطر",
+        "name_label": "الاسم:",
+        "generate_button": "إنشاء بطاقة التهنئة",
+        "caption": "صورتك للعيد",
+        "download": "تحميل الصورة!",
     }
 }
 
+# Get the current language texts
 lang = st.session_state.language
 texts = translations[lang]
 
+# Sidebar
 with st.sidebar:
     st.image("./MM-LOGO.png")
     st.button(
@@ -95,82 +91,53 @@ with st.sidebar:
 st.title(texts["title"])
 
 
-def create_image_with_name(name, template_path="./Personal Invitation.jpg"):
+def create_image_with_name(name, template_path="./Eid-Greeting2.jpg"):
+    # Open the template image
     img = Image.open(template_path)
     draw = ImageDraw.Draw(img)
 
+    # Reshape and fix Arabic text direction
     reshaped_text = arabic_reshaper.reshape(name)
     bidi_text = get_display(reshaped_text)
 
-    font_path = os.path.join("fonts", "DINNextLTArabic-Regular_0.ttf")
+    # Load custom Arabic font
+    font_path = os.path.join("fonts", "Amiri-Regular.ttf")  # Ensure this file exists!
     try:
-        font = ImageFont.truetype(font_path, size=70)
+        font = ImageFont.truetype(font_path, size=80)
     except IOError:
-        font = ImageFont.load_default()
+        font = ImageFont.load_default()  # Fallback, but won't support Arabic
 
+    # Get text size
     bbox = draw.textbbox((0, 0), bidi_text, font=font)
     text_width = bbox[2] - bbox[0]
     text_height = bbox[3] - bbox[1]
 
+    # Center text on the image
     img_width, img_height = img.size
     x = (img_width - text_width) / 2
-    y = (img_height - text_height) / 2 - 50
+    y = (img_height - text_height) / 2
 
-    draw.text((x, y), bidi_text, font=font, fill="#43FFAE")
+    # Draw text on the image
+    draw.text((x, y-100), bidi_text, font=font, fill="#008afe")
 
     return img
 
 
 st.write(texts["greeting"])
-names_input = st.text_area(texts["name_label"], height=200)
+name = st.text_input(texts["name_label"])
 
-st.info(texts['download_all_note'])
-
+img = None
 if st.button(texts["generate_button"]):
-    names_list = [name.strip() for name in names_input.splitlines() if name.strip()]
+    img = create_image_with_name(name)
+    st.image(img, caption=texts["caption"])
 
-    if not names_list:
-        st.warning(texts['warning'])
-    else:
-        generated_images_for_zip = []
+    img_bytes = io.BytesIO()
+    img.save(img_bytes, format="PNG")
+    img_bytes = img_bytes.getvalue()
 
-        for name in names_list:
-            with st.container():
-                st.markdown("---")
-                img = create_image_with_name(name)
-
-                st.image(img, caption=f"{texts['caption']} {name}")
-
-                img_bytes = io.BytesIO()
-                img.save(img_bytes, format="PNG")
-                img_bytes_value = img_bytes.getvalue()
-
-                st.download_button(
-                    label=f"📥 {texts['download_one']}",
-                    data=img_bytes_value,
-                    file_name=f"Invitation_Card_{name}.png",
-                    mime="image/png",
-                    key=f"download_single_{name}"
-                )
-
-                file_name_for_zip = f"Invitation_Card_{name}.png"
-                generated_images_for_zip.append((file_name_for_zip, img_bytes_value))
-
-        if generated_images_for_zip:
-            zip_buffer = io.BytesIO()
-            with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zf:
-                for file_name, data in generated_images_for_zip:
-                    zf.writestr(file_name, data)
-
-            zip_buffer.seek(0)
-
-            st.markdown("---")
-            st.success(texts['generation_success'])
-
-            st.download_button(
-                label=f"📂 {texts['download_all']}",
-                data=zip_buffer,
-                file_name="All_Invitation_Cards.zip",
-                mime="application/zip",
-                key="download_all_zip"
-            )
+    st.download_button(
+        label=texts["download"],
+        data=img_bytes,
+        file_name="eid_image.png",
+        mime="image/png",
+    )

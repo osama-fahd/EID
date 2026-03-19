@@ -28,6 +28,10 @@ def inject_custom_css():
         .stTitle, .stHeader, .stMarkdown {
             text-align: right;
         }
+        /* This hides the "Press Enter to apply" text entirely */
+        div[data-testid="InputInstructions"] {
+            display: none !important;
+        }
     </style>
     """
     if st.session_state.language == "Arabic":
@@ -44,7 +48,7 @@ def toggle_language():
 
 inject_custom_css()
 
-# Replaced with the translations from your screenshot
+# English and Arabic translations as specified
 translations = {
     "English": {
         "title": "Moneymoon Eid Images! 🎉",
@@ -72,7 +76,7 @@ lang = st.session_state.language
 texts = translations[lang]
 
 with st.sidebar:
-    # Make sure this logo path is correct for your project
+    # Ensure the MM-LOGO.png file is in the correct path
     try:
         st.image("./MM-LOGO.png")
     except:
@@ -91,8 +95,9 @@ with st.sidebar:
 
 st.title(texts["title"])
 
-# Updated default template path to reflect an Eid template
+# Updated function to position text at the bottom
 def create_image_with_name(name, template_path="./Eid_Template.jpg"):
+    # Ensure Eid_Template.jpg is present in the correct path
     img = Image.open(template_path)
     draw = ImageDraw.Draw(img)
 
@@ -103,6 +108,7 @@ def create_image_with_name(name, template_path="./Eid_Template.jpg"):
     try:
         font = ImageFont.truetype(font_path, size=70)
     except IOError:
+        st.error(f"Font file not found at {font_path}! Using default font.")
         font = ImageFont.load_default()
 
     bbox = draw.textbbox((0, 0), bidi_text, font=font)
@@ -111,9 +117,12 @@ def create_image_with_name(name, template_path="./Eid_Template.jpg"):
 
     img_width, img_height = img.size
     
-    # You might need to adjust this Y coordinate depending on your new template
+    # x is still centered
     x = (img_width - text_width) / 2
-    y = (img_height - text_height) / 2 - 50
+    
+    # !!! NEW Y CALCULATION !!!
+    # y = image height - text height - margin from bottom
+    y = img_height - text_height - 180 
 
     draw.text((x, y), bidi_text, font=font, fill="#43FFAE")
 
@@ -121,7 +130,7 @@ def create_image_with_name(name, template_path="./Eid_Template.jpg"):
 
 st.write(texts["greeting"])
 
-# Changed to st.text_input for a single name
+# Input for a single name
 name_input = st.text_input(texts["name_label"])
 
 if st.button(texts["generate_button"]):
@@ -132,9 +141,9 @@ if st.button(texts["generate_button"]):
     else:
         with st.container():
             st.markdown("---")
-            # Make sure your template image is named 'Eid_Template.jpg' or update the path below
+            # Ensure 'Eid_Template.jpg' exists in the directory.
             try:
-                img = create_image_with_name(name, template_path="./Eid-Greeting2.jpg")
+                img = create_image_with_name(name, template_path="./Eid_Template.jpg")
                 
                 st.image(img, caption=f"{texts['caption']} - {name}")
 

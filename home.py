@@ -48,7 +48,6 @@ def toggle_language():
 
 inject_custom_css()
 
-# English and Arabic translations as specified
 translations = {
     "English": {
         "title": "Moneymoon Eid Images! 🎉",
@@ -76,11 +75,10 @@ lang = st.session_state.language
 texts = translations[lang]
 
 with st.sidebar:
-    # Ensure the MM-LOGO.png file is in the correct path
     try:
         st.image("./MM-LOGO.png")
     except:
-        pass # Silently pass if logo is missing during testing
+        pass 
         
     st.button(
         "عربي" if st.session_state.language == "English" else "EN",
@@ -95,9 +93,7 @@ with st.sidebar:
 
 st.title(texts["title"])
 
-# Updated function to position text at the bottom
-def create_image_with_name(name, template_path="./Eid_Template.jpg"):
-    # Ensure Eid_Template.jpg is present in the correct path
+def create_image_with_name(name, template_path="./Eid-Greeting2.jpg"):
     img = Image.open(template_path)
     draw = ImageDraw.Draw(img)
 
@@ -117,10 +113,8 @@ def create_image_with_name(name, template_path="./Eid_Template.jpg"):
 
     img_width, img_height = img.size
     
-    # x is still centered
     x = (img_width - text_width) / 2
     
-    # !!! NEW Y CALCULATION !!!
     # y = image height - text height - margin from bottom
     y = img_height - text_height - 200 
 
@@ -130,7 +124,6 @@ def create_image_with_name(name, template_path="./Eid_Template.jpg"):
 
 st.write(texts["greeting"])
 
-# Input for a single name
 name_input = st.text_input(texts["name_label"])
 
 if st.button(texts["generate_button"]):
@@ -141,7 +134,6 @@ if st.button(texts["generate_button"]):
     else:
         with st.container():
             st.markdown("---")
-            # Ensure 'Eid_Template.jpg' exists in the directory.
             try:
                 img = create_image_with_name(name, template_path="./Eid-Greeting2.jpg")
                 
@@ -158,4 +150,4 @@ if st.button(texts["generate_button"]):
                     mime="image/png",
                 )
             except FileNotFoundError:
-                st.error("Template image not found! Please make sure 'Eid_Template.jpg' exists in the directory.")
+                st.error("Template image not found!")
